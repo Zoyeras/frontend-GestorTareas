@@ -1,15 +1,15 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://backend-gestortareas-production.up.railway.app/",
 });
 
 // Interceptor para AGREGAR el token a cada solicitud
-api.interceptors.request.use(config => {
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   console.log("Interceptor token:", token, "Headers antes:", config.headers);
   if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers["Authorization"] = `Bearer ${token}`;
     console.log("Headers después:", config.headers);
   }
   return config;
@@ -17,8 +17,8 @@ api.interceptors.request.use(config => {
 
 // Interceptor para MANEJAR errores 401
 api.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.response?.status === 401) {
       // Evitar redirección infinita si ya estamos en login
       if (window.location.pathname !== "/login") {
